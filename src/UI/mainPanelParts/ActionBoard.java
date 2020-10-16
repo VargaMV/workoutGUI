@@ -72,8 +72,8 @@ public class ActionBoard extends JPanel {
                 updateButtons();
             } catch (NumberFormatException ex) {
                 if("".equals(moneyInput.getText())) {
-                    game.incMoney(game.getCurrentValue());
                     game.setCurrentValue(0);
+                    game.incMoney(game.getCurrentValue());
                     updateButtons();
                 }
                 else {

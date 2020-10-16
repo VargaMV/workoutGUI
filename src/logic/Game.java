@@ -14,37 +14,47 @@ public class Game {
     private int size;
     private int rangeOfVision;
     private boolean maxRange;
-    private final Map<String, Integer> stocks = new HashMap<>();
 
-    public Game(){
+    //TODO: refactor below
+    private final Map<String, Integer> stocks = new HashMap<>();
+    private final Map<String, Integer> values = new HashMap<>();
+    private final Map<String, Integer> records = new HashMap<>();
+
+
+    public Game() {
         new Game(8);
     }
 
-    public Game(int mapSize){
+    public Game(int mapSize) {
         this.size = mapSize;
         Random rand = new Random();
         fields = new Field[size][size];
-        currentPos = new Coordinate(rand.nextInt(size),rand.nextInt(size));
+        currentPos = new Coordinate(rand.nextInt(size), rand.nextInt(size));
         currentValue = 0;
         rangeOfVision = 1;
         maxRange = false;
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
                 fields[i][j] = new Field();
-                if(rand.nextInt(4) == 0) {
+                if (rand.nextInt(4) == 0) {
                     fields[i][j].setValue(rand.nextInt(1000) + 1);
                     fields[i][j].setColor(Color.ORANGE);
                 }
             }
         }
 
-        String[] exercises = {"push-up", "pull-up","squat","jumping jacks", "sit-up"};
+        String[] exercises = {"push-up", "pull-up", "squat", "jumping jacks", "sit-up"};
+        Integer[] exValues = {14, 32, 8, 3, 10};
+        int i = 0;
         for (String key : exercises) {
             stocks.put(key, 0);
+            records.put(key, 0);
+            values.put(key, exValues[i]);
+            i++;
         }
     }
 
-    public void updateFieldColor(Color color){
+    public void updateFieldColor(Color color) {
         Field currentField = fields[currentPos.x][currentPos.y];
         currentField.setColor(color);
     }
@@ -52,10 +62,10 @@ public class Game {
     public void updateFieldValue(int value, boolean add) {
         Field currentField = fields[currentPos.x][currentPos.y];
         int prevValue = currentField.getValue();
-        currentField.setValue(add? (prevValue + value) : value);
+        currentField.setValue(add ? (prevValue + value) : value);
     }
 
-    public void incRangeOfVision(){
+    public void incRangeOfVision() {
         int prevRange = rangeOfVision;
         if (maxRange) {
             rangeOfVision = Math.min(2, rangeOfVision + 1);
@@ -63,7 +73,7 @@ public class Game {
         maxRange = !maxRange || prevRange == 2;
     }
 
-    public void incSpecifiedStock(String exercise){
+    public void incSpecifiedStock(String exercise) {
         int prevValue = stocks.get(exercise);
         stocks.put(exercise, prevValue + 1);
     }
@@ -83,7 +93,7 @@ public class Game {
     }
 
     public void occupyOrIncrease() {
-        if(getField(currentPos).getColor() == Color.green){
+        if (getField(currentPos).getColor() == Color.green) {
             updateFieldValue(currentValue, true);
         } else {
             updateFieldValue(currentValue, false);
@@ -102,11 +112,11 @@ public class Game {
         return currentPos;
     }
 
-    public int getX(){
+    public int getX() {
         return currentPos.x;
     }
 
-    public int getY(){
+    public int getY() {
         return currentPos.y;
     }
 
@@ -118,7 +128,7 @@ public class Game {
         return fields;
     }
 
-    public Field getField(int i, int j){
+    public Field getField(int i, int j) {
         return fields[i][j];
     }
 
@@ -144,6 +154,14 @@ public class Game {
 
     public Map<String, Integer> getStocks() {
         return stocks;
+    }
+
+    public Map<String, Integer> getValues() {
+        return values;
+    }
+
+    public Map<String, Integer> getRecords() {
+        return records;
     }
 
     //SETTERS

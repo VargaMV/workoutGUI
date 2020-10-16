@@ -10,11 +10,11 @@ public class MainFrame extends JFrame {
 
 
     private final Container containerPanel;
-    private JPanel mainPanel;
-    private JPanel stockPanel;
-    private JPanel workoutPanel;
+    private final JPanel mainPanel;
+    private final JPanel stockPanel;
+    private final JPanel workoutPanel;
     private final CardLayout cardLayout;
-    private Game game;
+    private final Game game;
 
     public MainFrame() {
         super("Workout GUI");
@@ -22,12 +22,14 @@ public class MainFrame extends JFrame {
         cardLayout = new CardLayout();
         this.mainPanel = new MainPanel(game);
         this.stockPanel = new StockPanel(game);
+        this.workoutPanel = new WorkoutPanel(game);
 
 
         containerPanel = new JPanel(cardLayout);
         containerPanel.setSize(800, 650);
         containerPanel.add(mainPanel, "main");
         containerPanel.add(stockPanel, "stock");
+        containerPanel.add(workoutPanel, "workout");
 
         add(containerPanel);
 
@@ -61,15 +63,24 @@ public class MainFrame extends JFrame {
         JMenuItem stocksPanelItem = new JMenuItem("Manage Stocks");
         stocksPanelItem.addActionListener(e -> switchToStocks());
         panelsMenu.add(stocksPanelItem);
+
+        JMenuItem workoutPanelItem = new JMenuItem("Manage Workout");
+        workoutPanelItem.addActionListener(e -> switchToWorkout());
+        panelsMenu.add(workoutPanelItem);
     }
 
-    public void switchToStocks(){
+    public void switchToStocks() {
         cardLayout.show(containerPanel, "stock");
-        ((StockPanel)stockPanel).updateContent();
+        ((StockPanel) stockPanel).updateContent();
     }
 
-    public void switchToMain(){
+    public void switchToMain() {
         cardLayout.show(containerPanel, "main");
-        ((MainPanel)mainPanel).updateInformationPanel();
+        ((MainPanel) mainPanel).updateInformationPanel();
+    }
+
+    public void switchToWorkout() {
+        cardLayout.show(containerPanel, "workout");
+        ((WorkoutPanel) workoutPanel).updateContent();
     }
 }
