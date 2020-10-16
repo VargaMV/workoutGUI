@@ -91,9 +91,5 @@ public class GameField extends JPanel {
         drawMap();
     }
 
-    public void incRangeOfVision() {
-        game.incRangeOfVision();
-        drawMap();
-    }
 }
 
