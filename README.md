@@ -1,2 +1,3 @@
 # workoutGUI (Beta)
-Simple game for workout motivation.
+GUI for simple game. 
+Goal: workout motivation
