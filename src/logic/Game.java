@@ -102,6 +102,12 @@ public class Game {
         setCurrentValue(0);
     }
 
+    public void addValue(String exercise, int reps) {
+        int prevValue = records.get(exercise);
+        records.put(exercise, prevValue + reps);
+        currentValue += values.get(exercise) * reps;
+    }
+
     //GETTERS
 
     public int getNextPrice(String exercise) {

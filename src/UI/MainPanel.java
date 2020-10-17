@@ -21,6 +21,7 @@ public class MainPanel extends JPanel {
 
     private final Game game;
     private JPanel informationPanel;
+    private JPanel actionsPanel;
 
     public MainPanel(Game game) {
         this.game = game;
@@ -48,7 +49,7 @@ public class MainPanel extends JPanel {
         listeners.put("evolve", evolveListener);
         listeners.put("add", addListener);
 
-        JPanel actionsPanel = new ActionBoard(game, listeners);
+        actionsPanel = new ActionBoard(game, listeners);
         add(actionsPanel);
 
         PlayerMoveListener moveListener = new PlayerMoveListener(informationPanel, miniMap, actionsPanel);
@@ -59,7 +60,11 @@ public class MainPanel extends JPanel {
     }
 
     public void updateInformationPanel() {
-        ((InformationBoard)informationPanel).updateInfo();
+        ((InformationBoard) informationPanel).updateInfo();
+    }
+
+    public void updateActionBoard() {
+        ((ActionBoard) actionsPanel).updateButtons();
     }
 
 }
