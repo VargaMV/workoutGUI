@@ -1,50 +1,71 @@
 package logic;
 
 import java.awt.*;
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
+import java.util.Scanner;
 
 public class Game {
 
     private Field[][] fields;
     private Coordinate currentPos;
     private int currentValue;
-    private int money;
+    private int money = 1000;
     private int size;
     private int rangeOfVision;
     private boolean maxRange;
-    private final Map<String, Integer> stocks = new HashMap<>();
 
-    public Game(){
+    //fix values
+    private final Map<String, Integer> values = new HashMap<>();
+
+    //changing values
+    private final Map<String, Integer> stocks = new HashMap<>();
+    private final Map<String, Integer> allStocks = new HashMap<>();
+    private final Map<String, Integer> records = new HashMap<>();
+
+
+    public Game() {
         new Game(8);
     }
 
-    public Game(int mapSize){
+    public Game(int mapSize) {
         this.size = mapSize;
         Random rand = new Random();
         fields = new Field[size][size];
-        currentPos = new Coordinate(rand.nextInt(size),rand.nextInt(size));
+        currentPos = new Coordinate(rand.nextInt(size), rand.nextInt(size));
         currentValue = 0;
         rangeOfVision = 1;
         maxRange = false;
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
                 fields[i][j] = new Field();
-                if(rand.nextInt(4) == 0) {
+                if (rand.nextInt(4) == 0) {
                     fields[i][j].setValue(rand.nextInt(1000) + 1);
                     fields[i][j].setColor(Color.ORANGE);
                 }
             }
         }
 
-        String[] exercises = {"push-up", "pull-up","squat","jumping jacks", "sit-up"};
-        for (String key : exercises) {
-            stocks.put(key, 0);
+        File data = new File("data.csv");
+        try (Scanner scanner = new Scanner(data)) {
+            while (scanner.hasNextLine()) {
+                String dataLine = scanner.nextLine();
+                String[] parts = dataLine.split(",");
+                String name = parts[0];
+                int value = Integer.parseInt(parts[1]);
+                values.put(name, value);
+                records.put(name, 0);
+                stocks.put(name, 0);
+                allStocks.put(name, rand.nextInt(50) + 1);
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
         }
     }
 
-    public void updateFieldColor(Color color){
+    public void updateFieldColor(Color color) {
         Field currentField = fields[currentPos.x][currentPos.y];
         currentField.setColor(color);
     }
@@ -52,10 +73,10 @@ public class Game {
     public void updateFieldValue(int value, boolean add) {
         Field currentField = fields[currentPos.x][currentPos.y];
         int prevValue = currentField.getValue();
-        currentField.setValue(add? (prevValue + value) : value);
+        currentField.setValue(add ? (prevValue + value) : value);
     }
 
-    public void incRangeOfVision(){
+    public void incRangeOfVision() {
         int prevRange = rangeOfVision;
         if (maxRange) {
             rangeOfVision = Math.min(2, rangeOfVision + 1);
@@ -63,9 +84,11 @@ public class Game {
         maxRange = !maxRange || prevRange == 2;
     }
 
-    public void incSpecifiedStock(String exercise){
+    public void incSpecifiedStock(String exercise) {
         int prevValue = stocks.get(exercise);
         stocks.put(exercise, prevValue + 1);
+        int prevValueAll = allStocks.get(exercise);
+        allStocks.put(exercise, prevValueAll + 1);
     }
 
     public boolean amIWorthy() {
@@ -83,7 +106,7 @@ public class Game {
     }
 
     public void occupyOrIncrease() {
-        if(getField(currentPos).getColor() == Color.green){
+        if (getField(currentPos).getColor() == Color.green) {
             updateFieldValue(currentValue, true);
         } else {
             updateFieldValue(currentValue, false);
@@ -92,21 +115,31 @@ public class Game {
         setCurrentValue(0);
     }
 
+    public void addValue(String exercise, int reps) {
+        int prevValue = records.get(exercise);
+        records.put(exercise, prevValue + reps);
+        currentValue += Math.ceil(values.get(exercise) * getSharePercentage(exercise) / 100.0) * reps;
+    }
+
     //GETTERS
 
     public int getNextPrice(String exercise) {
         return PriceCalculator.calculateNext(stocks.get(exercise));
     }
 
+    public int getAllStockNumber(String exercise) {
+        return allStocks.get(exercise);
+    }
+
     public Coordinate getCurrentPos() {
         return currentPos;
     }
 
-    public int getX(){
+    public int getX() {
         return currentPos.x;
     }
 
-    public int getY(){
+    public int getY() {
         return currentPos.y;
     }
 
@@ -118,7 +151,7 @@ public class Game {
         return fields;
     }
 
-    public Field getField(int i, int j){
+    public Field getField(int i, int j) {
         return fields[i][j];
     }
 
@@ -144,6 +177,22 @@ public class Game {
 
     public Map<String, Integer> getStocks() {
         return stocks;
+    }
+
+    public Map<String, Integer> getValues() {
+        return values;
+    }
+
+    public Map<String, Integer> getRecords() {
+        return records;
+    }
+
+    public Map<String, Integer> getAllStocks() {
+        return allStocks;
+    }
+
+    public int getSharePercentage(String exercise) {
+        return (int) Math.floor(stocks.get(exercise) * 100 / (double) allStocks.get(exercise));
     }
 
     //SETTERS

@@ -13,15 +13,13 @@ public class GameField extends JPanel {
     private final Game game;
     private ActionListener listener;
 
-    public GameField(Game game){
+    public GameField(Game game) {
         this.game = game;
         setLayout(null);
-        setBounds(0,0,500,500);
+        setBounds(0, 0, 500, 500);
         setBackground(Color.GRAY);
         drawMap();
-        listener = e -> {
-            System.out.println("MoveListener needs to be set");
-        };
+        listener = e -> System.out.println("MoveListener needs to be set");
 
     }
 
@@ -29,7 +27,7 @@ public class GameField extends JPanel {
         this.listener = listener;
     }
 
-    public void drawMap(){
+    public void drawMap() {
         removeAll();
         repaint();
         revalidate();
@@ -41,11 +39,11 @@ public class GameField extends JPanel {
         Field[][] fields = game.getFields();
 
         int minX = Math.max(0, posX - 2);
-        int maxX = Math.min(size-1, posX + 2);
+        int maxX = Math.min(size - 1, posX + 2);
         int minY = Math.max(0, posY - 2);
-        int maxY = Math.min(size-1, posY + 2);
-        for(int i = minX; i <= maxX; i++){
-            for(int j = minY; j <= maxY; j++){
+        int maxY = Math.min(size - 1, posY + 2);
+        for (int i = minX; i <= maxX; i++) {
+            for (int j = minY; j <= maxY; j++) {
                 FieldButton button = new FieldButton(i + "" + j);
                 button.setBounds((3 + i - posX) * 75, (3 + j - posY) * 75, 50, 50);
                 button.setBorderPainted(false);
@@ -59,43 +57,39 @@ public class GameField extends JPanel {
                 });
                 add(button);
                 button.setBackground(Color.GRAY);
-                if(pos.distance(i, j, game.isMaxRange()) <= game.getRangeOfVision()){
+                if (pos.distance(i, j, game.isMaxRange()) <= game.getRangeOfVision()) {
                     button.setBorderPainted(true);
-                    button.setBorder(BorderFactory.createLineBorder(fields[i][j].getColor(),3));
+                    button.setBorder(BorderFactory.createLineBorder(fields[i][j].getColor(), 3));
                 }
 
-                if(pos.distance(i, j,false) > 1) {
+                if (pos.distance(i, j, false) > 1) {
                     button.setEnabled(false);
-                } else if(pos.distance(i, j,false) == 1) {
+                } else if (pos.distance(i, j, false) == 1) {
                     button.setBorderPainted(true);
-                    if(game.getCurrentValue() > 0) {
+                    if (game.getCurrentValue() > 0) {
                         button.setEnabled(false);
                     } else {
                         button.setBackground(fields[i][j].getColor());
                     }
-                } else if(pos.distance(i, j,false) == 0) {
+                } else if (pos.distance(i, j, false) == 0) {
                     button.setEnabled(false);
                     button.setBorderPainted(true);
-                    button.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+                    button.setBorder(BorderFactory.createLineBorder(Color.BLACK, 3));
                     button.setBackground(fields[i][j].getColor());
                 }
             }
         }
 
         JLabel posLabel = new JLabel();
-        posLabel.setText(String.format("Current position: (%d, %d)",posX, posY));
+        posLabel.setText(String.format("Current position: (%d, %d)", posX, posY));
         posLabel.setBounds(20, 10, 200, 30);
         add(posLabel);
     }
 
-    public void setFieldColor(Color color){
+    public void setFieldColor(Color color) {
         game.updateFieldColor(color);
         drawMap();
     }
 
-    public void incRangeOfVision(){
-        game.incRangeOfVision();
-        drawMap();
-    }
 }
 
