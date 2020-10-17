@@ -27,9 +27,14 @@ public class MainFrame extends JFrame {
 
         containerPanel = new JPanel(cardLayout);
         containerPanel.setSize(800, 650);
+        JScrollPane scrollableStock = new JScrollPane(stockPanel);
+        scrollableStock.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        JScrollPane scrollableWorkout = new JScrollPane(workoutPanel);
+        scrollableWorkout.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+
         containerPanel.add(mainPanel, "main");
-        containerPanel.add(stockPanel, "stock");
-        containerPanel.add(workoutPanel, "workout");
+        containerPanel.add(scrollableStock, "stock");
+        containerPanel.add(scrollableWorkout, "workout");
 
         add(containerPanel);
 

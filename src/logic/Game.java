@@ -1,9 +1,11 @@
 package logic;
 
 import java.awt.*;
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
+import java.util.Scanner;
 
 public class Game {
 
@@ -15,9 +17,8 @@ public class Game {
     private int rangeOfVision;
     private boolean maxRange;
 
-    //TODO: refactor below
-    private final Map<String, Integer> stocks = new HashMap<>();
     private final Map<String, Integer> values = new HashMap<>();
+    private final Map<String, Integer> stocks = new HashMap<>();
     private final Map<String, Integer> records = new HashMap<>();
 
 
@@ -43,14 +44,19 @@ public class Game {
             }
         }
 
-        String[] exercises = {"push-up", "pull-up", "squat", "jumping jacks", "sit-up"};
-        Integer[] exValues = {14, 32, 8, 3, 10};
-        int i = 0;
-        for (String key : exercises) {
-            stocks.put(key, 0);
-            records.put(key, 0);
-            values.put(key, exValues[i]);
-            i++;
+        File data = new File("data.csv");
+        try (Scanner scanner = new Scanner(data)) {
+            while (scanner.hasNextLine()) {
+                String dataLine = scanner.nextLine();
+                String[] parts = dataLine.split(",");
+                String name = parts[0];
+                int value = Integer.parseInt(parts[1]);
+                values.put(name, value);
+                records.put(name, 0);
+                stocks.put(name, 0);
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
         }
     }
 

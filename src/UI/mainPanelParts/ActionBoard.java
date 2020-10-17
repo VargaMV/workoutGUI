@@ -31,27 +31,6 @@ public class ActionBoard extends JPanel {
         evolveButton.addActionListener(listeners.get("evolve"));
         add(evolveButton);
 
-        /*JTextField valueInput = new JTextField();
-        valueInput.setBounds(210, 10, 40, 30);
-        add(valueInput);*/
-
-        /*JButton addButton = new JButton("Add");
-        addButton.setBounds(110, 10, 80, 30);
-        addButton.addActionListener(listeners.get("add"));
-        addButton.addActionListener(e -> {
-            try {
-                int oldValue = game.getCurrentValue();
-                int newValue = Integer.parseInt(valueInput.getText());
-                game.setCurrentValue(oldValue + newValue);
-                valueInput.setText("");
-                messageLabel.setText("");
-                updateButtons();
-            } catch (NumberFormatException ex) {
-                messageLabel.setText("Integer number needed!");
-            }
-        });
-        add(addButton);*/
-
         JTextField moneyInput = new JTextField();
         moneyInput.setBounds(210, 10, 40, 30);
         add(moneyInput);

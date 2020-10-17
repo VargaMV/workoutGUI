@@ -36,25 +36,26 @@ public class WorkoutPanel extends JPanel {
                 updateContent();
             });
             inputFields[i] = new JTextField();
-            //inputFields[i].setSize(100, 30);
 
-            gbc.gridx = 0;
-            gbc.gridy = i + 1;
+            int col = (i % 2) * 3;
+            int row = Math.floorDiv(i, 2);
+            gbc.gridx = col;
+            gbc.gridy = row;
             gbc.ipadx = 10;
             gbc.ipady = 10;
             gbc.insets = new Insets(10, 0, 0, 0);
             add(exerciseLabels[i], gbc);
 
-            gbc.gridx = 1;
-            gbc.gridy = i + 1;
+            gbc.gridx = col + 1;
+            gbc.gridy = row;
             gbc.ipadx = 10;
             gbc.ipady = 10;
             gbc.insets = new Insets(10, 10, 0, 0);
             add(saveButtons[i], gbc);
 
-            gbc.gridx = 2;
-            gbc.gridy = i + 1;
-            gbc.ipadx = 80;
+            gbc.gridx = col + 2;
+            gbc.gridy = row;
+            gbc.ipadx = 60;
             gbc.ipady = 10;
             gbc.insets = new Insets(10, 10, 0, 0);
             add(inputFields[i], gbc);
