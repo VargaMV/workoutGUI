@@ -20,6 +20,7 @@ import java.util.Map;
 public class MainPanel extends JPanel {
 
     private final Game game;
+    private GameField gameFieldPanel;
     private JPanel informationPanel;
     private JPanel actionsPanel;
 
@@ -39,7 +40,7 @@ public class MainPanel extends JPanel {
         JPanel miniMap = new MiniMap(game);
         add(miniMap);
 
-        GameField gameFieldPanel = new GameField(game);
+        gameFieldPanel = new GameField(game);
 
         EvolveListener evolveListener = new EvolveListener(gameFieldPanel, game);
         OccupyListener occupyListener = new OccupyListener(new ArrayList<>(Arrays.asList(gameFieldPanel, miniMap, informationPanel)), game);
@@ -65,6 +66,10 @@ public class MainPanel extends JPanel {
 
     public void updateActionBoard() {
         ((ActionBoard) actionsPanel).updateButtons();
+    }
+
+    public void updateMap() {
+        gameFieldPanel.drawMap();
     }
 
 }

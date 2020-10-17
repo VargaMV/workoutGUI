@@ -12,13 +12,17 @@ public class Game {
     private Field[][] fields;
     private Coordinate currentPos;
     private int currentValue;
-    private int money;
+    private int money = 1000;
     private int size;
     private int rangeOfVision;
     private boolean maxRange;
 
+    //fix values
     private final Map<String, Integer> values = new HashMap<>();
+
+    //changing values
     private final Map<String, Integer> stocks = new HashMap<>();
+    private final Map<String, Integer> allStocks = new HashMap<>();
     private final Map<String, Integer> records = new HashMap<>();
 
 
@@ -54,6 +58,7 @@ public class Game {
                 values.put(name, value);
                 records.put(name, 0);
                 stocks.put(name, 0);
+                allStocks.put(name, rand.nextInt(50) + 1);
             }
         } catch (Exception e) {
             System.out.println(e.getMessage());
@@ -82,6 +87,8 @@ public class Game {
     public void incSpecifiedStock(String exercise) {
         int prevValue = stocks.get(exercise);
         stocks.put(exercise, prevValue + 1);
+        int prevValueAll = allStocks.get(exercise);
+        allStocks.put(exercise, prevValueAll + 1);
     }
 
     public boolean amIWorthy() {
@@ -111,13 +118,17 @@ public class Game {
     public void addValue(String exercise, int reps) {
         int prevValue = records.get(exercise);
         records.put(exercise, prevValue + reps);
-        currentValue += values.get(exercise) * reps;
+        currentValue += Math.ceil(values.get(exercise) * getSharePercentage(exercise) / 100.0) * reps;
     }
 
     //GETTERS
 
     public int getNextPrice(String exercise) {
         return PriceCalculator.calculateNext(stocks.get(exercise));
+    }
+
+    public int getAllStockNumber(String exercise) {
+        return allStocks.get(exercise);
     }
 
     public Coordinate getCurrentPos() {
@@ -174,6 +185,14 @@ public class Game {
 
     public Map<String, Integer> getRecords() {
         return records;
+    }
+
+    public Map<String, Integer> getAllStocks() {
+        return allStocks;
+    }
+
+    public int getSharePercentage(String exercise) {
+        return (int) Math.floor(stocks.get(exercise) * 100 / (double) allStocks.get(exercise));
     }
 
     //SETTERS

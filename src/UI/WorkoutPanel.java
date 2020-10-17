@@ -25,9 +25,12 @@ public class WorkoutPanel extends JPanel {
         for (var entry : game.getValues().entrySet()) {
             String exercise = entry.getKey();
             Integer value = entry.getValue();
-            int all = game.getRecords().get(exercise);
+            int records = game.getRecords().get(exercise);
+            int ownStock = game.getStocks().get(exercise);
+            int allStock = game.getAllStockNumber(exercise);
+            int myValue = (int) Math.ceil(value * ownStock / (double) allStock);
             exerciseLabels[i] = new JLabel();
-            exerciseLabels[i].setText(String.format("%s : %d Value: %d", exercise, all, value));
+            exerciseLabels[i].setText(String.format("%s : %d DefValue: %d OwnValue: %d", exercise, records, value, myValue));
             saveButtons[i] = new JButton("Save");
             int finalI = i;
             saveButtons[i].addActionListener(e -> {
@@ -70,8 +73,11 @@ public class WorkoutPanel extends JPanel {
         for (var entry : game.getValues().entrySet()) {
             String exercise = entry.getKey();
             Integer value = entry.getValue();
-            int all = game.getRecords().get(exercise);
-            exerciseLabels[i].setText(String.format("%s : %d \t Value: %d", exercise, all, value));
+            int records = game.getRecords().get(exercise);
+            int ownStock = game.getStocks().get(exercise);
+            int allStock = game.getAllStockNumber(exercise);
+            int myValue = (int) Math.ceil(value * ownStock / (double) allStock);
+            exerciseLabels[i].setText(String.format("%s : %d DefValue: %d OwnValue: %d", exercise, records, value, myValue));
             i++;
         }
     }

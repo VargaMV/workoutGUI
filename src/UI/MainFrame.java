@@ -83,6 +83,7 @@ public class MainFrame extends JFrame {
         cardLayout.show(containerPanel, "main");
         ((MainPanel) mainPanel).updateInformationPanel();
         ((MainPanel) mainPanel).updateActionBoard();
+        ((MainPanel) mainPanel).updateMap();
     }
 
     public void switchToWorkout() {
